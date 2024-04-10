@@ -1,24 +1,19 @@
-rm(list = ls())
-
-serial.test <- function(seq, d)
+serial_test <- function (u, d) 
 {
-  if(length(seq) %% 2 == 1)
-  {
-    seq <- seq[1 : (n-1)]
-  }
-  n <- length(seq)
-  M <- matrix(seq, ncol = 2, byrow = T)
-  tup <- apply(M, MARGIN = 1, function(Vec) paste(Vec, collapse = ","))
-  df <- as.data.frame(tup) 
-  colnames(df) <- "tup"
-  freq_tab <- as.data.frame(tup) %>% group_by(tup) %>%
-        summarise(frequency = n()) %>%
-       arrange(desc(frequency)) 
-  freq <- freq_tab$frequency
+  if (length(u)/d - as.integer(length(u)/d) > 0) 
+    stop("the length of 'u' must be a multiple of d")
+  pair <- matrix(floor(u * d), length(u)/2, 2)
+  poly <- pair[, 1] * d + pair[, 2]
+  obsnum <- sapply(0:(d^2 - 1), function(x) sum(poly == x))
+  expnum <- length(u)/(2 * d^2)
+  residu <- (obsnum - expnum)/sqrt(expnum)
+  stat <- sum(residu^2)
+  pvalue <- pchisq(stat, d^2 - 1, lower.tail = FALSE)
+  options(digits = 2)
   
-  chi_sq <- sum((freq - rep(n/2, n/2)/d^2)^2) * 2 * d^2 /n
-  return(chi_sq)
+  res <- list(statistic = stat, parameter = d^2 - 1, p.value = pvalue, 
+              observed = obsnum, expected = expnum, residuals = residu)
+  return(res)
 }
 
-serial.test(sample(1:20, 100, replace = T), 20)
-qchisq(0.95, 49)
+serial_test(runif(1000), d = 8)
