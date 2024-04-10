@@ -1,36 +1,33 @@
-rm(list = ls())
-
-gap_test <- function(sample, n, t, alpha, beta)
-{
-  count = rep(0, t+1)
-  s = 0
-  j <- min(which(sample >= alpha & sample < beta))
-  while(s < n)
-  {
-    r = 0
-    for(i in c(j : length(sample)))
-    {
-      if(sample[i+1] >= alpha & sample[i+1] < beta)
-      {
-        j = i+1
-        break
-      }
-      else
-      {
-        r = r+1
-      }
+gap_frequency_distribution <- function(sequence, lower_bound, upper_bound) {
+  # Sort the sequence
+  sorted_sequence <- sequence
+  
+  # Initialize variables
+  gap_lengths <- numeric()
+  prev_num <- NULL
+  
+  # Iterate through the sorted sequence
+  for (num in sorted_sequence) {
+    # If previous number exists and the difference between current and previous exceeds bounds, count as gap
+    if (!is.null(prev_num) && (num - prev_num) > upper_bound) {
+      gap_lengths <- c(gap_lengths, num - prev_num)
     }
-    s = s+1
-    if(r < t)
-    {
-      count[r+1] = count[r+1] + 1
-    }
-    else
-      count[t+1] = count[t+1] + 1
+    prev_num <- num
   }
-  return (count)
+  
+  # Calculate frequency distribution
+  freq_table <- table(gap_lengths)
+  
+  return(freq_table)
 }
 
-sample = sample((1:5), 10, replace = T);sample
-gap_test(sample, 3, 3, 1, 3)
+# Example usage:
+sequence <- c(1, 3, 5, 7, 10, 15, 18, 20, 25, 30)
+lower_bound <- 5
+upper_bound <- 15
+
+frequency_distribution <- gap_frequency_distribution(sequence, lower_bound, upper_bound)
+print(frequency_distribution)
+
+gap.test(sequence, lower = 2, upper = 10)
 
