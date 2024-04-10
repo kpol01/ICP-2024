@@ -1,33 +1,32 @@
-gap_frequency_distribution <- function(sequence, lower_bound, upper_bound) {
-  # Sort the sequence
-  sorted_sequence <- sequence
+gap_test <- function (u, lower, upper) 
+{
+  gap <- (!((u <= upper) & (u >= lower))) * 1
+  n <- length(u)
+  p <- upper - lower
+  indexzero <- (gap == 1) * 1:n
+  indexzero <- indexzero[indexzero != 0]
+  indexzero <- c(0, indexzero, n + 1)
+  lindzero <- length(indexzero)
+  lengthsize <- indexzero[2:lindzero] - indexzero[2:lindzero - 
+                                                    1] - 1
+  lengthsize <- lengthsize[lengthsize != 0]
+  maxlen <- max(lengthsize)
+  maxlen <- max(maxlen, floor((log(10^(-1)) - 2 * log(1 - p) - 
+                                 log(n))/log(p)))
+  obsnum <- sapply(1:maxlen, function(t) sum(lengthsize == 
+                                               t))
+  expnum <- (1 - p)^2 * p^(1:maxlen) * n
+  residu <- (obsnum - expnum)/sqrt(expnum)
+  stat <- sum(residu^2)
+  pvalue <- pchisq(stat, maxlen - 1, lower.tail = FALSE)
+  options(digits = 2)
   
-  # Initialize variables
-  gap_lengths <- numeric()
-  prev_num <- NULL
-  
-  # Iterate through the sorted sequence
-  for (num in sorted_sequence) {
-    # If previous number exists and the difference between current and previous exceeds bounds, count as gap
-    if (!is.null(prev_num) && (num - prev_num) > upper_bound) {
-      gap_lengths <- c(gap_lengths, num - prev_num)
-    }
-    prev_num <- num
-  }
-  
-  # Calculate frequency distribution
-  freq_table <- table(gap_lengths)
-  
-  return(freq_table)
+  df <- data.frame(1:length(obsnum), obsnum, expnum)
+  colnames(df) <- c("Gap Length", "Observed Freq", "Expected Freq")
+  res <- list(statistic = stat, parameter = maxlen - 1, p.value = pvalue, 
+              df)
+  return(res)
 }
 
-# Example usage:
-sequence <- c(1, 3, 5, 7, 10, 15, 18, 20, 25, 30)
-lower_bound <- 5
-upper_bound <- 15
-
-frequency_distribution <- gap_frequency_distribution(sequence, lower_bound, upper_bound)
-print(frequency_distribution)
-
-gap.test(sequence, lower = 2, upper = 10)
-
+gap_test(runif(1000), 0.3, 0.7)
+gap.test(runif(1000), 0.1, 0.9)
