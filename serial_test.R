@@ -11,7 +11,7 @@ serial_test <- function (u, d)
   pvalue <- pchisq(stat, d^2 - 1, lower.tail = FALSE)
   options(digits = 2)
   
-  res <- list(statistic = stat, parameter = d^2 - 1, p.value = pvalue, 
+  res <- list(statistic = stat, df = d^2 - 1, p.value = pvalue, 
               observed = obsnum, expected = expnum, residuals = residu)
   return(res)
 }
