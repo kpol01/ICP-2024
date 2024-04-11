@@ -12,6 +12,7 @@ format:
     transition: slide
     theme: serif
     fontsize: 150%
+    footer: Indian Statistical Institute, Delhi
 execute: 
   echo: true
 editor: visual
@@ -167,9 +168,11 @@ freq_test <- function (u, d)
 :::
 
 
-## Implementation of the `freq_test` Function 
+## Implementation of the `freq_test` Function
 
-**Under** $H_0$:
+::: {.panel-tabset}
+
+### **Under** $H_0$:
 
 $$U_1, U_2, U_3, ... \sim U(0,1)$$
 
@@ -179,9 +182,9 @@ d <- 50
 freq_test(sample, d)
 ```
 
-## Implementation of the `freq_test` Function {.scrollable}
 
-**Under** $H_1$:
+
+### **Under** $H_1$:
 
 
  $$U_i \sim F_i(.), \quad \text{independently}$$where $$F_i = \begin{cases} U(0, \frac{1}{4}) & \text{if } i = 2k \\ U(\frac{1}{4},1) & \text{if } i = 2k+1 \end{cases}$$
@@ -209,6 +212,8 @@ sampling.dep <- function(n)
 ```{r}
 freq_test(sampling.dep(1000), 10)
 ```
+:::
+
 # Serial Test
 
 ## Test Procedure
@@ -262,3 +267,39 @@ serial_test <- function (u, d)
 }
 ```
 
+## Implementing `serial_test` function on simulated data
+
+::: {.panel-tabset}
+
+### Under $H_0$
+
+$$U_1, U_2, U_3, ... \sim U(0,1)$$
+
+We have implemented `serial_test` on a random sample of size 1000 from $U(0,1)$ distribution.
+
+```{r}
+serial_test(runif(1000), d = 10)
+```
+
+
+
+
+### Under $H_1$
+
+$$U_i \sim F_i(.), \quad \text{independently}$$where $$F_i = \begin{cases} U(0, \frac{1}{4}) & \text{if } i = 2k \\ U(\frac{1}{4},1) & \text{if } i = 2k+1 \end{cases}$$
+We have implemented `serial_test` on a random sample of size 1000 from $U(0,1)$ distribution.
+
+```{r}
+serial_test(sampling.dep(1000), d = 10)
+```
+
+:::
+
+## Some Notes on Serial Test
+
+::: incremental
+- We can not use all possible adjacent pairs $\{Y_i, Y_{i+1}\}$.
+- The serial test can be expended from considering pairs to triples, quadruples, ...
+
+- However for that we need to keep $d$ low because then it will lead to a large number of possible classes.
+:::
