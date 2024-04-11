@@ -1,6 +1,20 @@
 ---
-title: "Test for randomness"
-format: revealjs
+title: "Tests for Randomness"
+
+author: "Ananyo Dey
+      <br>
+      Kaustav Paul"
+institute: Indian Statistical Institute, Delhi Center
+Date: "2024.04.11"
+format: 
+  revealjs: 
+    incremental: true
+    transition: slide
+    theme: serif
+    fontsize: 150%
+    footer: Indian Statistical Institute, Delhi
+execute: 
+  echo: true
 editor: visual
 ---
 
@@ -16,7 +30,12 @@ editor: visual
 
 ## Flowchart
 
-```{r, fig.cap="Gap Test"}
+:::columns
+
+:::{.column}
+
+```{r, echo = F, warning=F, fig.height=7, fig.width=5, fig.align='left', fig.cap="Gap Test"}
+
 library(DiagrammeR)
 graph <- "
 digraph flowchart {
@@ -56,38 +75,9 @@ grViz(graph)
 
 ```
 
+:::
 
-## Behind the scene {.scrollable}
-
--   Define, "gap" variable as, $$ G_i =\begin{cases} 1 & \text{if lower} \leq U_i \leq \text{upper}  \\ 0 & \text{otherwise} \end{cases} $$
-
--   Let $p$ stands for the probability that $G_i$ equals to one i.e. $p =$ upper - lower = $\mathbf{\beta - \alpha}$.
-
--   Now, let's focus on the **zero gaps** :
-
-    -   A zero gap occurs when consecutive $G_i$ values are both $0$.
-
-    -   We denote the length of a zero gap as $j$.
-
-    -   We count the number of zero gaps of length $j$, denoted as $n_j$.
-
-    -   We calculate $p_j$ for the probability the length of zeros gaps equals to $j$ is $(1-p)^2 p^j$
-
-## Test Statistics {.scrollable}
-
--   We compare the observed number of zero gaps ($n_j$) with the expected number under the null hypothesis.
-
--   The null hypothesis assumes that the lengths of zero gaps follow a certain probability distribution (geometric).
-
--   The chi-squared statistic is calculated as : $$ S = \sum_{j=1}^m \frac{(n_j - np_j)^2}{np_j}$$ where the $m$ denotes the maximum number of lengths.
-
-## Comments
-
--   We reject $H_0$ if the p-value is less than 0.05 at $5\%$ level of significance.
-
--   The special cases $(\alpha , \beta) = (0, \frac{1}{2})$ or $(\alpha , \beta) = ( \frac{1}{2}, 1)$ give rise to tests that are sometimes called "runs above the mean" and "runs below the mean," respectively.
-
-## An example
+:::{.column}
 
 ```{r}
 gap_test <- function (u, lower, upper) 
@@ -120,10 +110,76 @@ gap_test <- function (u, lower, upper)
  
 ```
 
+:::
+
+::: 
+
+
+## Behind the scene {.scrollable}
+
+-   Define, "gap" variable as, $$ G_i =\begin{cases} 1 & \text{if lower} \leq U_i \leq \text{upper}  \\ 0 & \text{otherwise} \end{cases} $$
+
+-   Let $p$ stands for the probability that $G_i$ equals to one i.e. $p =$ upper - lower = $\mathbf{\beta - \alpha}$.
+
+-   Now, let's focus on the **zero gaps** :
+
+    -   A zero gap occurs when consecutive $G_i$ values are both $0$.
+
+    -   We denote the length of a zero gap as $j$.
+
+    -   We count the number of zero gaps of length $j$, denoted as $n_j$.
+
+    -   We calculate $p_j$ for the probability the length of zeros gaps equals to $j$ is $(1-p)^2 p^j$
+
+## Test Statistics {.scrollable}
+
+-   We compare the observed number of zero gaps ($n_j$) with the expected number under the null hypothesis.
+
+-   The null hypothesis assumes that the lengths of zero gaps follow a certain probability distribution (geometric).
+
+-   The chi-squared statistic is calculated as : $$ S = \sum_{j=1}^m \frac{(n_j - np_j)^2}{np_j}$$ where the $m$ denotes the maximum number of lengths.
+
+## Comments
+
+-   We reject $H_0$ if the p-value is less than 0.05 at $5\%$ level of significance.
+
+-   The special cases $(\alpha , \beta) = (0, \frac{1}{2})$ or $(\alpha , \beta) = ( \frac{1}{2}, 1)$ give rise to tests that are sometimes called "runs above the mean" and "runs below the mean," respectively.
+
+## An example{.scrollable}
+
+::: {.panel-tabset}
+
+### **Under** $H_0$:
+
 ```{r}
 set.seed(1324)
 gap_test(runif(1000), 0.3, 0.7)
 ```
+
+### **Under** $H_1$:
+
+```{r}
+set.seed(1456)
+sampling.dep <- function(n)
+{
+  sam <- 0
+  sam[1] <- runif(1)
+  for(i in (2:n))
+  {
+    if(i %% 2 == 0){
+    sam[i] <- runif(1, 0, 0.25)}
+    else{
+      sam[i] <- runif(1, 0.25, 1)
+    }
+  }
+  return(sam)
+}
+
+gap_test(sampling.dep(1000), 0.3,0.7)
+```
+
+
+:::
 
 # Run Test
 
@@ -137,7 +193,11 @@ gap_test(runif(1000), 0.3, 0.7)
 
 ## Flowchart
 
-```{r, fig.cap="Run Test"}
+:::columns
+
+:::{.column}
+
+```{r, echo = F, warning=F, fig.height=7, fig.width=5, fig.align='left', fig.cap="Run Test"}
 library(DiagrammeR)
 graph <- "
 digraph flowchart {
@@ -175,35 +235,13 @@ grViz(graph)
 
 ```
 
-## Behind the scene {.scrollable}
+:::
 
--   Here we are discussing *the number of runs* only.
-
--   For a given data we transform this into a dichotomous vector according as each values is above or below a given threshold. Note the values equal to the level are removed from the sample.
-
--   For the alternative "left.sided", the null of randomness is tested against a trend. By using the alternative "right.sided", the null hypothesis of randomness is tested against a first order negative serial correlation, using "two.sided" alternative, null hypothesis of randomness is tested against nonrandomness.
-
-## Test Statistic
-
--   Here we can perform both **exact test** and **large sample test**.
-
--   The test statistics is given by: $$ S = \frac{R - \mu}{\sigma}$$ where, $R = r_1 + r_2$ where $r_1$ and $r_2$ are the run length of the first and second type respectively.\
-    $\mu = 1 + \frac{2n_1n_2}{(n_1+n_2)}$\
-    $\sigma^2 = 2 n_1 n_2 \frac{(2 n_1 n_2 - n_1 - n_2)}{(n^2 (n - 1))}$ where $n = n_1 + n_2$.\
-
-## Comments {.scrollable}
-
--   We reject $H_0$ if the p-value is less than 0.05 at $5\%$ level of significance.
-
--   In R we use our threshold value as median of the data, that gives special types of test "runs test above and below the median".
-
--   A sequence may also be tested for "runs up" and "runs down." This means that we examine the length of monotone portions of the original sequence. As an example of ten digits $|129|8|5|367|04|$. Putting a vertical line at the left and right and between $X_j$ and $X_{j+1}$ whenever $X_j > X_{j+1}$, we obtain which displays the "runs up": There is a run of length 3, followed by two runs of length 1, followed by another run of length 3, followed by a run of length 2.
-
-## An Example
+:::{.column}
 
 ```{r}
 library(randtests)
-runs_test <- function (x, alternative = "two.sided", threshold = median(x), 
+run_test <- function (x, alternative = "two.sided", threshold = median(x), 
     pvalue = "normal", plot = FALSE) 
 {
     dname <- deparse(substitute(x))
@@ -289,19 +327,76 @@ runs_test <- function (x, alternative = "two.sided", threshold = median(x),
 
 ```
 
-1.  
+:::
+
+:::
+
+## Behind the scene {.scrollable}
+
+-   Here we are discussing *the number of runs* only.
+
+-   For a given data we transform this into a dichotomous vector according as each values is above or below a given threshold. Note the values equal to the level are removed from the sample.
+
+-   For the alternative "left.sided", the null of randomness is tested against a trend. By using the alternative "right.sided", the null hypothesis of randomness is tested against a first order negative serial correlation, using "two.sided" alternative, null hypothesis of randomness is tested against nonrandomness.
+
+## Test Statistic
+
+-   Here we can perform both **exact test** and **large sample test**.
+
+-   The test statistics is given by: $$ S = \frac{R - \mu}{\sigma}$$ where, $R = r_1 + r_2$ where $r_1$ and $r_2$ are the run length of the first and second type respectively.\
+    $\mu = 1 + \frac{2n_1n_2}{(n_1+n_2)}$\
+    $\sigma^2 = 2 n_1 n_2 \frac{(2 n_1 n_2 - n_1 - n_2)}{(n^2 (n - 1))}$ where $n = n_1 + n_2$.\
+
+## Comments {.scrollable}
+
+-   We reject $H_0$ if the p-value is less than 0.05 at $5\%$ level of significance.
+
+-   In R we use our threshold value as median of the data, that gives special types of test "runs test above and below the median".
+
+-   A sequence may also be tested for "runs up" and "runs down." This means that we examine the length of monotone portions of the original sequence. As an example of ten digits $|129|8|5|367|04|$. Putting a vertical line at the left and right and between $X_j$ and $X_{j+1}$ whenever $X_j > X_{j+1}$, we obtain which displays the "runs up": There is a run of length 3, followed by two runs of length 1, followed by another run of length 3, followed by a run of length 2.
+
+## An Example
+
+::: {.panel-tabset}
+
+### **Under** $H_0$:  
+
+1. 
 
 ```{r}
-set.seed(1)
-runs_test(runif(1000), alternative = "right.sided", pvalue = "normal")
+set.seed(1423)
+run_test(runif(1000), alternative = "right.sided", pvalue = "normal")
 ```
 
 2.  
 
 ```{r}
-set.seed(1)
-runs_test(rexp(50), alternative = "left.sided", pvalue = "exact")
+set.seed(1579)
+run_test(rexp(50), alternative = "left.sided", pvalue = "exact")
 ```
+
+### **Under** $H_1$:
+
+```{r}
+set.seed(1456)
+sampling.dep <- function(n)
+{
+  sam <- 0
+  sam[1] <- runif(1)
+  for(i in (2:n))
+  {
+    if(i %% 2 == 0){
+    sam[i] <- runif(1, 0, 0.25)}
+    else{
+      sam[i] <- runif(1, 0.25, 1)
+    }
+  }
+  return(sam)
+}
+run_test(sampling.dep(1000), alternative = "two.sided")
+```
+
+:::
 
 # Thank you:))
 
