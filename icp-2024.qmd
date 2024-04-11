@@ -12,7 +12,7 @@ format:
     code-fold: true
     transition: slide
     theme: serif
-    fontsize: 200%
+    fontsize: 150%
 execute: 
   echo: true
 editor: visual
@@ -71,9 +71,12 @@ $$D_n = \sup_{x} |S_n(x) - F_0(x)|$$
 
 ## The Setup
 
-Let us consider a sequence of numbers 
 
-$$U_1, U_2, U_3, ...$$ 
+::: incremental
 
-of real numbers where each $0 < U_i < 1$. We need to test whether it is a random sample from $U(0,1)$.
+- Let us consider a sequence of numbers $$U_1, U_2, U_3, ...\quad (1)$$ of real numbers where each $0 < U_i < 1$. We need to test whether it is a random sample from $U(0,1)$.
 
+-  Some of the tests are designed primarily for integer-valued
+sequences, instead of the real-valued sequence (1). In this case, the auxiliary
+sequence $$Y_1, Y_2, ... \quad (2)$$ defined by the rule $$ Y_n = \lfloor dU_n \rfloor \quad ...(3)$$ is used instead. So testing the uniformity of $\{U_n\}$ between 0 and 1 is equivalent to testing uniformity of $\{Y_n\}$ in the set $\{0, 1, ..., d-1\}$. 
+:::
