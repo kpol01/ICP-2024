@@ -16,7 +16,7 @@ freq_test <- function (u, d)
   return(res)
 }
 
-freq_test(runif(1000), 10)
+freq_test(runif(1000), 100)
 
 sampling.dep <- function(n)
 {
@@ -25,14 +25,24 @@ sampling.dep <- function(n)
   for(i in (2:n))
   {
     if(i %% 2 == 0){
-    sam[i] <- runif(1, 0, sam[i-1])}
+    sam[i] <- runif(1, 0, 0.25)}
     else{
-      sam[i] <- runif(1, sam[i-1], 1)
+      sam[i] <- runif(1, 0.25, 1)
     }
   }
   return(sam)
 }
 
 sampling.dep(1000)
+set.seed(seed = 1234)
+freq_test(sampling.dep(1000), 100)
 
-freq_test(sampling.dep(1000), 10)
+sam <- sampling.dep(1000)
+freq.test(sam,0:499)
+d <- seq(10, 1000, 50)
+
+pvalue <- sapply(d, function(x) freq_test(sam,x)$p.value)
+df <- data.frame(d,pvalue)
+
+library(ggplot2)
+ggplot(data = df) + geom_point(mapping = aes(x = d, y = pvalue))
