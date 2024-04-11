@@ -7,7 +7,7 @@ freq_test <- function (u, d)
   residu <- (obsnum - expnum)/sqrt(expnum)
   stat <- sum(residu^2)
   pvalue <- pchisq(stat, length(seq) - 1, lower.tail = FALSE)
-  options(digits = 2)
+  
   df <- data.frame(1:length(obsnum), obsnum, expnum)
   colnames(df) <- c("Y_j", "Observed Freq", "Expected Freq")
   
@@ -38,7 +38,7 @@ set.seed(seed = 1234)
 freq_test(sampling.dep(1000), 100)
 
 sam <- runif(1000)
-freq.test(sam,0:499)
+freq.test(sampling.dep(1000),0:499)
 d <- seq(10, 1000, 50)
 
 pvalue <- sapply(d, function(x) freq_test(sam,x)$p.value)

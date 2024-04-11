@@ -16,4 +16,4 @@ serial_test <- function (u, d)
   return(res)
 }
 
-serial_test(runif(1000), d = 8)
+serial_test(runif(1000), d = 50)

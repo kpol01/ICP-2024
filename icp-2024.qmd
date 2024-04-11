@@ -9,7 +9,6 @@ Date: "2024.04.11"
 format: 
   revealjs: 
     incremental: true
-    code-fold: true
     transition: slide
     theme: serif
     fontsize: 150%
@@ -92,7 +91,12 @@ $$D_n = \sup_{x} |S_n(x) - F_0(x)|$$
 
 ## Algorithm to Calculate Frequencies
 
-```{r echo = F, warning=F, fig.height=7}
+
+:::columns
+
+:::{.column}
+
+```{r echo = F, warning=F, fig.height=7, fig.align='center'}
 library(DiagrammeR)
 graph <- "
 digraph flowchart {
@@ -134,6 +138,9 @@ digraph flowchart {
 grViz(graph)
 ```
 
+:::
+
+:::{.column}
 
 ```{r}
 freq_test <- function (u, d) 
@@ -145,7 +152,7 @@ freq_test <- function (u, d)
   residu <- (obsnum - expnum)/sqrt(expnum)
   stat <- sum(residu^2)
   pvalue <- pchisq(stat, length(seq) - 1, lower.tail = FALSE)
-  options(digits = 2)
+  
   df <- data.frame(1:length(obsnum), obsnum, expnum)
   colnames(df) <- c("Y_j", "Observed Freq", "Expected Freq")
   
@@ -155,9 +162,14 @@ freq_test <- function (u, d)
 }
 ```
 
-## Implementation of the `freq_test` Function
+:::
 
-**Under $H_0$:**
+:::
+
+
+## Implementation of the `freq_test` Function 
+
+**Under** $H_0$:
 
 $$U_1, U_2, U_3, ... \sim U(0,1)$$
 
@@ -165,5 +177,88 @@ $$U_1, U_2, U_3, ... \sim U(0,1)$$
 sample <- runif(1000)
 d <- 50
 freq_test(sample, d)
+```
+
+## Implementation of the `freq_test` Function {.scrollable}
+
+**Under** $H_1$:
+
+
+ $$U_i \sim F_i(.), \quad \text{independently}$$where $$F_i = \begin{cases} U(0, \frac{1}{4}) & \text{if } i = 2k \\ U(\frac{1}{4},1) & \text{if } i = 2k+1 \end{cases}$$
+ We constructed the function `sampling.dep` to sample from this distribution.
+
+```{r, include = F}
+sampling.dep <- function(n)
+{
+  sam <- 0
+  sam[1] <- runif(1)
+  for(i in (2:n))
+  {
+    if(i %% 2 == 0){
+    sam[i] <- runif(1, 0, 0.25)}
+    else{
+      sam[i] <- runif(1, 0.25, 1)
+    }
+  }
+  return(sam)
+}
+```
+
+ Applying `freq_test` over a sample from the above distribution.
+
+```{r}
+freq_test(sampling.dep(1000), 10)
+```
+# Serial Test
+
+## Test Procedure
+
+::: incremental
+- To check if adjacent pairs of observations are random or not.
+
+- To carry out the serial test, we simply count the number of times that the
+pair $(Y_{2j} , Y_{2j+1}) = (q, r)$ occurs, for $0 \leq j < k$, where $n = 2k$.
+
+-  These counts are to be made for each pair of integers $(q, r)$ with $0 \leq q, r < d$.
+
+- There are $d^2$ unique pairs of the above type. If the sequence is random all the $d^2$ pairs have equal probability of occurrence ($\frac{1}{d^2}$).
+
+- Expected frequency of the $i^{th}$ pair is $E_i = \frac{n}{d^2}$.
+
+- Then we calculate the $\chi^2$-goodness of fit considering the $d^2$ unique pairs as the classes. In this case $Q \sim \chi^2_{d^2 - 1}$ under $H_0$.
+:::
+
+## Algorithm to obtain frequencies of the pairs
+
+- The algorithm goes exactly the same as frequency test. Here instead we count the number of adjacent pairs.
+
+- To count the number of pairs we use the following procedure.
+
+- For each pair $(Y_{2j} , Y_{2j+1})$ we calculate $p_j = Y_{2j} \times d + Y_{2j+1}$.
+
+- It can be easily shown that for unique pair $(a, b)$ the value $p = a \times d + b$ is unique.
+
+- So obtaining frequency distribution of the pairs $(Y_{2j}, Y_{2j+1})$ is same as obtaining the frequency distribution of $p_j$ values. 
+
+## Implementing Serial Test on simulated data
+
+We have made an  R function `serial_test` for this purpose:
+
+```{r}
+serial_test <- function (u, d) 
+{
+  pair <- matrix(floor(u * d), length(u)/2, 2)
+  p <- pair[, 1] * d + pair[, 2]
+  obsnum <- sapply(0:(d^2 - 1), function(x) sum(p == x))
+  expnum <- length(u)/(2 * d^2)
+  residu <- (obsnum - expnum)/sqrt(expnum)
+  stat <- sum(residu^2)
+  pvalue <- pchisq(stat, d^2 - 1, lower.tail = FALSE)
+  
+  
+  res <- list(statistic = stat, df = d^2 - 1, p.value = pvalue, 
+              observed = obsnum, expected = expnum)
+  return(res)
+}
 ```
 

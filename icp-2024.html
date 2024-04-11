@@ -476,15 +476,16 @@ Ananyo Dey <br> Kaustav Paul
 </section>
 <section id="algorithm-to-calculate-frequencies" class="slide level2">
 <h2>Algorithm to Calculate Frequencies</h2>
-<div class="cell">
+<div class="columns">
+<div class="column">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="grViz html-widget html-fill-item" id="htmlwidget-63e17f3614cb0c412d2d" style="width:960px;height:672px;"></div>
-<script type="application/json" data-for="htmlwidget-63e17f3614cb0c412d2d">{"x":{"diagram":"\ndigraph flowchart {\n\n  # Node definitions\n  A [shape=box, label=\"U_n\", color=\"blue\"];\n  B [shape=box, label=\"Y_n\", color=\"blue\"];\n  C [shape=box, label=\"count[r] = 0\", color=\"blue\"];\n  D [shape=ellipse, label=\"Is r = Y_i?\", color=\"orange\"]\n  E [shape=box, label=\"count[r] = count[r] + 1\", color=\"blue\"]\n  F [shape=box, label=\"i = i+1\", color=\"blue\"]\n  G [shape=ellipse, label=\"Is i <= n?\", color=\"orange\"]\n  H [shape = box, label=\"r = r+1\", color=\"blue\"]\n  I [shape=ellipse, label=\"Is r<d?\", color=\"orange\"]\n  J [shape=box, label=\"End\", color=\"blue\"]\n  \n  \n  \n  \n  # Edges to indicate the flow\n  A -> B [label=\"Divide by d and take floor\"]\n  B -> C [label=\"set r=0\"]\n  C -> D [label = \"set i=1\"]\n  D -> E [label=\"yes\"]\n  E -> F \n  D -> F [label=\"no\"]\n  F -> G \n  G -> D [label=\"yes\"]\n  G -> H [label=\"no\"]\n  H -> I \n  I -> C [label=\"yes\"]\n  I -> J [label=\"no\"]\n  \n\n}\n\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-c2de2ac8be707b63773f" style="width:960px;height:672px;"></div>
+<script type="application/json" data-for="htmlwidget-c2de2ac8be707b63773f">{"x":{"diagram":"\ndigraph flowchart {\n\n  # Node definitions\n  A [shape=box, label=\"U_n\", color=\"blue\"];\n  B [shape=box, label=\"Y_n\", color=\"blue\"];\n  C [shape=box, label=\"count[r] = 0\", color=\"blue\"];\n  D [shape=ellipse, label=\"Is r = Y_i?\", color=\"orange\"]\n  E [shape=box, label=\"count[r] = count[r] + 1\", color=\"blue\"]\n  F [shape=box, label=\"i = i+1\", color=\"blue\"]\n  G [shape=ellipse, label=\"Is i <= n?\", color=\"orange\"]\n  H [shape = box, label=\"r = r+1\", color=\"blue\"]\n  I [shape=ellipse, label=\"Is r<d?\", color=\"orange\"]\n  J [shape=box, label=\"End\", color=\"blue\"]\n  \n  \n  \n  \n  # Edges to indicate the flow\n  A -> B [label=\"Divide by d and take floor\"]\n  B -> C [label=\"set r=0\"]\n  C -> D [label = \"set i=1\"]\n  D -> E [label=\"yes\"]\n  E -> F \n  D -> F [label=\"no\"]\n  F -> G \n  G -> D [label=\"yes\"]\n  G -> H [label=\"no\"]\n  H -> I \n  I -> C [label=\"yes\"]\n  I -> J [label=\"no\"]\n  \n\n}\n\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
+</div><div class="column">
 <div class="cell">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>freq_test <span class="ot">&lt;-</span> <span class="cf">function</span> (u, d) </span>
 <span id="cb1-2"><a href="#cb1-2"></a>{</span>
 <span id="cb1-3"><a href="#cb1-3"></a>  seq <span class="ot">=</span> <span class="dv">0</span><span class="sc">:</span>(d<span class="dv">-1</span>)</span>
@@ -494,7 +495,7 @@ Ananyo Dey <br> Kaustav Paul
 <span id="cb1-7"><a href="#cb1-7"></a>  residu <span class="ot">&lt;-</span> (obsnum <span class="sc">-</span> expnum)<span class="sc">/</span><span class="fu">sqrt</span>(expnum)</span>
 <span id="cb1-8"><a href="#cb1-8"></a>  stat <span class="ot">&lt;-</span> <span class="fu">sum</span>(residu<span class="sc">^</span><span class="dv">2</span>)</span>
 <span id="cb1-9"><a href="#cb1-9"></a>  pvalue <span class="ot">&lt;-</span> <span class="fu">pchisq</span>(stat, <span class="fu">length</span>(seq) <span class="sc">-</span> <span class="dv">1</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb1-10"><a href="#cb1-10"></a>  <span class="fu">options</span>(<span class="at">digits =</span> <span class="dv">2</span>)</span>
+<span id="cb1-10"><a href="#cb1-10"></a>  </span>
 <span id="cb1-11"><a href="#cb1-11"></a>  df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(obsnum), obsnum, expnum)</span>
 <span id="cb1-12"><a href="#cb1-12"></a>  <span class="fu">colnames</span>(df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Y_j"</span>, <span class="st">"Observed Freq"</span>, <span class="st">"Expected Freq"</span>)</span>
 <span id="cb1-13"><a href="#cb1-13"></a>  </span>
@@ -502,83 +503,162 @@ Ananyo Dey <br> Kaustav Paul
 <span id="cb1-15"><a href="#cb1-15"></a>              <span class="at">p.value =</span> pvalue, df)</span>
 <span id="cb1-16"><a href="#cb1-16"></a>  <span class="fu">return</span>(res)</span>
 <span id="cb1-17"><a href="#cb1-17"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+</div>
+</div>
 </div>
 </section>
 <section id="implementation-of-the-freq_test-function" class="slide level2">
 <h2>Implementation of the <code>freq_test</code> Function</h2>
-<p><strong>Under <span class="math inline">\(H_0\)</span>:</strong></p>
+<p><strong>Under</strong> <span class="math inline">\(H_0\)</span>:</p>
 <p><span class="math display">\[U_1, U_2, U_3, ... \sim U(0,1)\]</span></p>
 <div class="cell">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>sample <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1000</span>)</span>
 <span id="cb2-2"><a href="#cb2-2"></a>d <span class="ot">&lt;-</span> <span class="dv">50</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="fu">freq_test</span>(sample, d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>$statistic
-[1] 51
+[1] 46.8
 
 $parameter
 [1] 49
 
 $p.value
-[1] 0.38
+[1] 0.5627664
 
 [[4]]
    Y_j Observed Freq Expected Freq
 1    1            25            20
-2    2            19            20
-3    3            19            20
-4    4            20            20
-5    5            14            20
-6    6            13            20
-7    7            19            20
-8    8            24            20
-9    9            20            20
-10  10            14            20
-11  11            19            20
-12  12            29            20
-13  13            24            20
-14  14            21            20
-15  15            20            20
-16  16            27            20
-17  17            17            20
-18  18            17            20
-19  19            16            20
-20  20            19            20
-21  21            13            20
+2    2            20            20
+3    3            16            20
+4    4            12            20
+5    5            25            20
+6    6            19            20
+7    7            20            20
+8    8            16            20
+9    9            24            20
+10  10            13            20
+11  11            22            20
+12  12            23            20
+13  13            30            20
+14  14            20            20
+15  15            17            20
+16  16            25            20
+17  17            18            20
+18  18            22            20
+19  19            19            20
+20  20            24            20
+21  21            23            20
 22  22            21            20
-23  23            14            20
-24  24            19            20
-25  25            13            20
-26  26            19            20
-27  27            29            20
-28  28            18            20
-29  29            26            20
-30  30            23            20
-31  31            24            20
-32  32            29            20
-33  33            26            20
-34  34            19            20
-35  35            16            20
-36  36            21            20
-37  37            18            20
-38  38            21            20
-39  39            19            20
-40  40            25            20
-41  41            24            20
-42  42            27            20
-43  43            12            20
-44  44            19            20
-45  45            12            20
-46  46            21            20
-47  47            21            20
-48  48            22            20
-49  49            15            20
-50  50            18            20</code></pre>
+23  23            21            20
+24  24            27            20
+25  25            23            20
+26  26            21            20
+27  27            10            20
+28  28            16            20
+29  29            18            20
+30  30            30            20
+31  31            17            20
+32  32            22            20
+33  33            19            20
+34  34            17            20
+35  35            21            20
+36  36            17            20
+37  37            23            20
+38  38            13            20
+39  39            24            20
+40  40            21            20
+41  41            18            20
+42  42            16            20
+43  43            15            20
+44  44            13            20
+45  45            20            20
+46  46            20            20
+47  47            23            20
+48  48            15            20
+49  49            21            20
+50  50            25            20</code></pre>
 </div>
+</div>
+</section>
+<section id="implementation-of-the-freq_test-function-1" class="slide level2 scrollable">
+<h2>Implementation of the <code>freq_test</code> Function</h2>
+<p><strong>Under</strong> <span class="math inline">\(H_1\)</span>:</p>
+<p><span class="math display">\[U_i \sim F_i(.), \quad \text{independently}\]</span>where <span class="math display">\[F_i = \begin{cases} U(0, \frac{1}{4}) &amp; \text{if } i = 2k \\ U(\frac{1}{4},1) &amp; \text{if } i = 2k+1 \end{cases}\]</span> We constructed the function <code>sampling.dep</code> to sample from this distribution.</p>
+<p>Applying <code>freq_test</code> over a sample from the above distribution.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">freq_test</span>(<span class="fu">sampling.dep</span>(<span class="dv">1000</span>), <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$statistic
+[1] 301.16
+
+$parameter
+[1] 9
+
+$p.value
+[1] 1.48123e-59
+
+[[4]]
+   Y_j Observed Freq Expected Freq
+1    1           201           100
+2    2           199           100
+3    3           140           100
+4    4            70           100
+5    5            70           100
+6    6            58           100
+7    7            58           100
+8    8            75           100
+9    9            60           100
+10  10            69           100</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="serial-test" class="title-slide slide level1 center">
+<h1>Serial Test</h1>
+
+</section>
+<section id="test-procedure-1" class="slide level2">
+<h2>Test Procedure</h2>
+<div>
+<ul>
+<li class="fragment"><p>To check if adjacent pairs of observations are random or not.</p></li>
+<li class="fragment"><p>To carry out the serial test, we simply count the number of times that the pair <span class="math inline">\((Y_{2j} , Y_{2j+1}) = (q, r)\)</span> occurs, for <span class="math inline">\(0 \leq j &lt; k\)</span>, where <span class="math inline">\(n = 2k\)</span>.</p></li>
+<li class="fragment"><p>These counts are to be made for each pair of integers <span class="math inline">\((q, r)\)</span> with <span class="math inline">\(0 \leq q, r &lt; d\)</span>.</p></li>
+<li class="fragment"><p>There are <span class="math inline">\(d^2\)</span> unique pairs of the above type. If the sequence is random all the <span class="math inline">\(d^2\)</span> pairs have equal probability of occurrence (<span class="math inline">\(\frac{1}{d^2}\)</span>).</p></li>
+<li class="fragment"><p>Expected frequency of the <span class="math inline">\(i^{th}\)</span> pair is <span class="math inline">\(E_i = \frac{n}{d^2}\)</span>.</p></li>
+<li class="fragment"><p>Then we calculate the <span class="math inline">\(\chi^2\)</span>-goodness of fit considering the <span class="math inline">\(d^2\)</span> unique pairs as the classes. In this case <span class="math inline">\(Q \sim \chi^2_{d^2 - 1}\)</span> under <span class="math inline">\(H_0\)</span>.</p></li>
+</ul>
+</div>
+</section>
+<section id="algorithm-to-obtain-frequencies-of-the-pairs" class="slide level2">
+<h2>Algorithm to obtain frequencies of the pairs</h2>
+<ul>
+<li class="fragment"><p>The algorithm goes exactly the same as frequency test. Here instead we count the number of adjacent pairs.</p></li>
+<li class="fragment"><p>To count the number of pairs we use the following procedure.</p></li>
+<li class="fragment"><p>For each pair <span class="math inline">\((Y_{2j} , Y_{2j+1})\)</span> we calculate <span class="math inline">\(p_j = Y_{2j} \times d + Y_{2j+1}\)</span>.</p></li>
+<li class="fragment"><p>It can be easily shown that for unique pair <span class="math inline">\((a, b)\)</span> the value <span class="math inline">\(p = a \times d + b\)</span> is unique.</p></li>
+<li class="fragment"><p>So obtaining frequency distribution of the pairs <span class="math inline">\((Y_{2j}, Y_{2j+1})\)</span> is same as obtaining the frequency distribution of <span class="math inline">\(p_j\)</span> values.</p></li>
+</ul>
+</section>
+<section id="implementing-serial-test-on-simulated-data" class="slide level2">
+<h2>Implementing Serial Test on simulated data</h2>
+<p>We have made an R function <code>serial_test</code> for this purpose:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>serial_test <span class="ot">&lt;-</span> <span class="cf">function</span> (u, d) </span>
+<span id="cb6-2"><a href="#cb6-2"></a>{</span>
+<span id="cb6-3"><a href="#cb6-3"></a>  pair <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">floor</span>(u <span class="sc">*</span> d), <span class="fu">length</span>(u)<span class="sc">/</span><span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb6-4"><a href="#cb6-4"></a>  p <span class="ot">&lt;-</span> pair[, <span class="dv">1</span>] <span class="sc">*</span> d <span class="sc">+</span> pair[, <span class="dv">2</span>]</span>
+<span id="cb6-5"><a href="#cb6-5"></a>  obsnum <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">0</span><span class="sc">:</span>(d<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">1</span>), <span class="cf">function</span>(x) <span class="fu">sum</span>(p <span class="sc">==</span> x))</span>
+<span id="cb6-6"><a href="#cb6-6"></a>  expnum <span class="ot">&lt;-</span> <span class="fu">length</span>(u)<span class="sc">/</span>(<span class="dv">2</span> <span class="sc">*</span> d<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb6-7"><a href="#cb6-7"></a>  residu <span class="ot">&lt;-</span> (obsnum <span class="sc">-</span> expnum)<span class="sc">/</span><span class="fu">sqrt</span>(expnum)</span>
+<span id="cb6-8"><a href="#cb6-8"></a>  stat <span class="ot">&lt;-</span> <span class="fu">sum</span>(residu<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb6-9"><a href="#cb6-9"></a>  pvalue <span class="ot">&lt;-</span> <span class="fu">pchisq</span>(stat, d<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">1</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-10"><a href="#cb6-10"></a>  </span>
+<span id="cb6-11"><a href="#cb6-11"></a>  </span>
+<span id="cb6-12"><a href="#cb6-12"></a>  res <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">statistic =</span> stat, <span class="at">df =</span> d<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">1</span>, <span class="at">p.value =</span> pvalue, </span>
+<span id="cb6-13"><a href="#cb6-13"></a>              <span class="at">observed =</span> obsnum, <span class="at">expected =</span> expnum)</span>
+<span id="cb6-14"><a href="#cb6-14"></a>  <span class="fu">return</span>(res)</span>
+<span id="cb6-15"><a href="#cb6-15"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="footer footer-default">
 
