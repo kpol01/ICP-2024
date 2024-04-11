@@ -1,0 +1,307 @@
+---
+title: "Test for randomness"
+format: revealjs
+editor: visual
+---
+
+# Gap Test
+
+## Setup
+
+-   The idea of the gap test is to examine the length of the "gaps" and perform the *chi-square test*.
+
+-   This test can be performed on the *iid* uniform random variable $U_1, U_2, \cdots, U_n$.
+
+-   For performing this test we need "lower" and "upper" values denoted as $\alpha$ and $\beta$ respectively. Note here both real should be in between $0$ and $1$.
+
+## Flowchart
+
+```{r, fig.cap="Gap Test"}
+library(DiagrammeR)
+graph <- "
+digraph flowchart {
+
+  # Node definitions
+  A [shape=box, label=\"Stat\", color=\"blue\"]
+  B [shape=box, label=\"i = 0\", color=\"blue\"]
+  C [shape=box, label=\"U_i\", color=\"blue\"];
+  D [shape=box, label=\"Set r = 0\", color=\"blue\"];
+  E [shape=box, label=\"i = i+1\", color=\"blue\"];
+  F [shape=ellipse, label=\"Is i <= n?\", color=\"orange\"]
+  G [shape=box, label=\"lower <= U_i <= upper\", color=\"blue\"]
+  H [shape=box, label=\"Record the gap length r\", color=\"blue\"]
+  I [shape=ellipse, label=\"m (pre defined) gaps found?\", color=\"orange\"]
+  J [shape=box, label=\"End\", color=\"blue\"]
+  K [shape=box, label=\"r = r+1\", color=\"blue\"]
+  
+  
+  # Edges to indicate the flow
+  A -> B 
+  B -> C
+  C -> D
+  E -> F 
+  F -> K [label=\"yes\"]
+  D -> G 
+  G -> H [label=\"yes\"]
+  G -> E [label=\"no\"]
+  K -> C 
+  F -> J [label=\"no\"]
+  H -> I
+  I -> J [label=\"yes\"]
+}
+
+"
+
+grViz(graph)
+
+```
+
+
+## Behind the scene {.scrollable}
+
+-   Define, "gap" variable as, $$ G_i =\begin{cases} 1 & \text{if lower} \leq U_i \leq \text{upper}  \\ 0 & \text{otherwise} \end{cases} $$
+
+-   Let $p$ stands for the probability that $G_i$ equals to one i.e. $p =$ upper - lower = $\mathbf{\beta - \alpha}$.
+
+-   Now, let's focus on the **zero gaps** :
+
+    -   A zero gap occurs when consecutive $G_i$ values are both $0$.
+
+    -   We denote the length of a zero gap as $j$.
+
+    -   We count the number of zero gaps of length $j$, denoted as $n_j$.
+
+    -   We calculate $p_j$ for the probability the length of zeros gaps equals to $j$ is $(1-p)^2 p^j$
+
+## Test Statistics {.scrollable}
+
+-   We compare the observed number of zero gaps ($n_j$) with the expected number under the null hypothesis.
+
+-   The null hypothesis assumes that the lengths of zero gaps follow a certain probability distribution (geometric).
+
+-   The chi-squared statistic is calculated as : $$ S = \sum_{j=1}^m \frac{(n_j - np_j)^2}{np_j}$$ where the $m$ denotes the maximum number of lengths.
+
+## Comments
+
+-   We reject $H_0$ if the p-value is less than 0.05 at $5\%$ level of significance.
+
+-   The special cases $(\alpha , \beta) = (0, \frac{1}{2})$ or $(\alpha , \beta) = ( \frac{1}{2}, 1)$ give rise to tests that are sometimes called "runs above the mean" and "runs below the mean," respectively.
+
+## An example
+
+```{r}
+gap_test <- function (u, lower, upper) 
+ {
+   gap <- (!((u <= upper) & (u >= lower))) * 1
+   n <- length(u)
+   p <- upper - lower
+   indexzero <- (gap == 1) * 1:n
+   indexzero <- indexzero[indexzero != 0]
+   indexzero <- c(0, indexzero, n + 1)
+   lindzero <- length(indexzero)
+   lengthsize <- indexzero[2:lindzero] - indexzero[2:lindzero -1] - 1
+   lengthsize <- lengthsize[lengthsize != 0]
+   maxlen <- max(lengthsize)
+   maxlen <- max(maxlen, floor((log(10^(-1)) - 2 * log(1 - p) - 
+                                  log(n))/log(p)))
+   obsnum <- sapply(1:maxlen, function(t) sum(lengthsize == t))
+   expnum <- (1 - p)^2 * p^(1:maxlen) * n
+   residu <- (obsnum - expnum)/sqrt(expnum)
+   stat <- sum(residu^2)
+   pvalue <- pchisq(stat, maxlen - 1, lower.tail = FALSE)
+   options(digits = 2)
+   
+   df <- data.frame(1:length(obsnum), obsnum, expnum)
+   colnames(df) <- c("Gap Length", "Observed Freq", "Expected Freq")
+   res <- list(statistic = stat, parameter = maxlen - 1, p.value = pvalue, 
+               df)
+   return(res)
+ }
+ 
+```
+
+```{r}
+set.seed(1324)
+gap_test(runif(1000), 0.3, 0.7)
+```
+
+# Run Test
+
+## Setup
+
+-   Given an ordered sequence of one or more types of symbols, we define **run** as a succession of one or more types of symbols which are followed or proceed by a different symbol or no symbol at all.
+
+-   Clues to lack of randomness are provided by any tendency of the symbols to exhibit a definite pattern in the sequence.
+
+-   Note both the number of runs and lengths of the runs which are of course interrelated, should reflect the existence of some sort of pattern.
+
+## Flowchart
+
+```{r, fig.cap="Run Test"}
+library(DiagrammeR)
+graph <- "
+digraph flowchart {
+
+  # Node definitions
+  A [shape=box, label=\"Stat\", color=\"blue\"]
+  B [shape=box, label=\"i = 0\"]
+  C [shape=box, label=\"X_i\", color=\"blue\"];
+  D [shape=ellipse, label=\"Is X_i = X_0 ?\", color=\"orange\"];
+  E [shape=box, label=\"i = i+1\", color=\"blue\"];
+  F [shape=ellipse, label=\"Is i <= n?\", color=\"orange\"]
+  G [shape=ellipse, label=\"Is X_i < X_0 ?\", color=\"orange\"]
+  H [shape=box, label=\"Count[i] = -1\", color=\"blue\"]
+  I [shape=box, label=\"Count[i] = 1\", color=\"blue\"]
+  J [shape=box, label=\"End\", color=\"blue\"]
+  
+  
+  # Edges to indicate the flow
+  A -> B [label = \"Median(X_1,...,X_n) = X_0\"]
+  B -> E
+  C -> D 
+  D -> E [label=\"yes\"]
+  E -> F 
+  D -> G [label=\"no\"]
+  G -> H [label=\"yes\"]
+  G -> I [label=\"no\"]
+  F -> C [label=\"yes\"]
+  E -> J [label=\"no\"]
+  H,I -> E
+}
+
+"
+
+grViz(graph)
+
+```
+
+## Behind the scene {.scrollable}
+
+-   Here we are discussing *the number of runs* only.
+
+-   For a given data we transform this into a dichotomous vector according as each values is above or below a given threshold. Note the values equal to the level are removed from the sample.
+
+-   For the alternative "left.sided", the null of randomness is tested against a trend. By using the alternative "right.sided", the null hypothesis of randomness is tested against a first order negative serial correlation, using "two.sided" alternative, null hypothesis of randomness is tested against nonrandomness.
+
+## Test Statistic
+
+-   Here we can perform both **exact test** and **large sample test**.
+
+-   The test statistics is given by: $$ S = \frac{R - \mu}{\sigma}$$ where, $R = r_1 + r_2$ where $r_1$ and $r_2$ are the run length of the first and second type respectively.\
+    $\mu = 1 + \frac{2n_1n_2}{(n_1+n_2)}$\
+    $\sigma^2 = 2 n_1 n_2 \frac{(2 n_1 n_2 - n_1 - n_2)}{(n^2 (n - 1))}$ where $n = n_1 + n_2$.\
+
+## Comments {.scrollable}
+
+-   We reject $H_0$ if the p-value is less than 0.05 at $5\%$ level of significance.
+
+-   In R we use our threshold value as median of the data, that gives special types of test "runs test above and below the median".
+
+-   A sequence may also be tested for "runs up" and "runs down." This means that we examine the length of monotone portions of the original sequence. As an example of ten digits $|129|8|5|367|04|$. Putting a vertical line at the left and right and between $X_j$ and $X_{j+1}$ whenever $X_j > X_{j+1}$, we obtain which displays the "runs up": There is a run of length 3, followed by two runs of length 1, followed by another run of length 3, followed by a run of length 2.
+
+## An Example
+
+```{r}
+library(randtests)
+runs_test <- function (x, alternative = "two.sided", threshold = median(x), 
+    pvalue = "normal", plot = FALSE) 
+{
+    dname <- deparse(substitute(x))
+    if (alternative == "t") {
+        alternative <- "two.sided"
+    }
+    if (alternative == "l") {
+        alternative <- "left.sided"
+    }
+    if (alternative == "r") {
+        alternative <- "right.sided"
+    }
+    if (alternative != "two.sided" & alternative != "left.sided" & 
+        alternative != "right.sided") {
+        stop("must give a valid alternative")
+    }
+    x <- na.omit(x)
+    stopifnot(is.numeric(x))
+    x <- x[x != threshold]
+    s <- sign(x - threshold)
+    n1 <- length(s[s > 0])
+    n2 <- length(s[s < 0])
+    runs <- rle(s)
+    r1 <- length(runs$lengths[runs$values == 1])
+    r2 <- length(runs$lengths[runs$values == -1])
+    n <- n1 + n2
+    mu <- 1 + 2 * n1 * n2/(n1 + n2)
+    vr <- 2 * n1 * n2 * (2 * n1 * n2 - n1 - n2)/(n^2 * (n - 1))
+    rr <- r1 + r2
+    if (plot) {
+        plot((1:n)[s > 0], x[s > 0], xlim = c(1, n), ylim = c(min(x), 
+            max(x)), xlab = "", ylab = dname)
+        points((1:n)[s < 0], x[s < 0], col = "red")
+        abline(h = threshold, col = gray(0.4))
+        for (i in 1:(n - 1)) {
+            if (s[i] * s[i + 1] < 0) {
+                abline(v = i + 0.5, lty = 2)
+            }
+        }
+    }
+    pv <- 0
+    if (pvalue == "exact") {
+        if (alternative == "two.sided") {
+            pv1 <- sum(druns(1:rr, n1, n2))
+            pv2 <- sum(druns(rr:(n1 + n2), n1, n2))
+            pv <- 2 * min(pv1, pv2)
+        }
+        if (alternative == "left.sided") {
+            pv <- sum(druns(2:rr, n1, n2))
+        }
+        if (alternative == "right.sided") {
+            pv <- sum(druns(rr:(n1 + n2), n1, n2))
+        }
+    }
+    if (pvalue == "normal") {
+        pv0 <- pnorm((rr - mu)/sqrt(vr))
+        if (alternative == "two.sided") {
+            pv <- 2 * min(pv0, 1 - pv0)
+        }
+        if (alternative == "left.sided") {
+            pv <- pv0
+        }
+        if (alternative == "right.sided") {
+            pv <- 1 - pv0
+        }
+    }
+    if (alternative == "two.sided") {
+        alternative <- "nonrandomness"
+    }
+    if (alternative == "left.sided") {
+        alternative <- "trend"
+    }
+    if (alternative == "right.sided") {
+        alternative <- "first-order negative autocorrelation"
+    }
+    rval <- list(statistic = c(statistic = (rr - mu)/sqrt(vr)), 
+        p.value = pv, runs = rr, mu = mu, var = vr, method = "Runs Test", 
+        data.name = dname, parameter = c(runs = rr, n1 = n1, 
+            n2 = n2, n = n), alternative = alternative)
+    class(rval) <- "htest"
+    return(rval)
+}
+
+```
+
+1.  
+
+```{r}
+set.seed(1)
+runs_test(runif(1000), alternative = "right.sided", pvalue = "normal")
+```
+
+2.  
+
+```{r}
+set.seed(1)
+runs_test(rexp(50), alternative = "left.sided", pvalue = "exact")
+```
+
+# Thank you:))
+
