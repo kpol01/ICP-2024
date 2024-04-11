@@ -80,3 +80,20 @@ $$D_n = \sup_{x} |S_n(x) - F_0(x)|$$
 sequences, instead of the real-valued sequence (1). In this case, the auxiliary
 sequence $$Y_1, Y_2, ... \quad (2)$$ defined by the rule $$ Y_n = \lfloor dU_n \rfloor \quad ...(3)$$ is used instead. So testing the uniformity of $\{U_n\}$ between 0 and 1 is equivalent to testing uniformity of $\{Y_n\}$ in the set $\{0, 1, ..., d-1\}$. 
 :::
+
+# Frequency Test 
+
+## Test Procedure
+
+:::incremental
+- We are provided with a sequence of real numbers $$U_1, U_2,...$$ We need to test $$H_0: U_1, U_2, ... \sim U(0,1) \text{ independently} \quad \text{vs} \quad H_1: \text{not } H_0$$
+
+- For an integer $d$ we construct the sequence $\{Y_n\}$ as discussed earlier. 
+
+- If $H_0$ is true, $\{Y_n\}$ is a random sample from $\{0, 1, ..., d-1\}$.
+
+- We count the number of occurences of $r$ in $\{Y_n\}$ for all $0 \leq r \leq d-1$.
+
+- Under $H_0$, expected frequency of each $r$ in $\{Y_n\}$ is $\frac{n}{d}$.
+
+:::

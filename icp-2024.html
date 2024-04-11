@@ -386,6 +386,23 @@ Ananyo Dey <br> Kaustav Paul
 <li class="fragment"><p>Some of the tests are designed primarily for integer-valued sequences, instead of the real-valued sequence (1). In this case, the auxiliary sequence <span class="math display">\[Y_1, Y_2, ... \quad (2)\]</span> defined by the rule <span class="math display">\[ Y_n = \lfloor dU_n \rfloor \quad ...(3)\]</span> is used instead. So testing the uniformity of <span class="math inline">\(\{U_n\}\)</span> between 0 and 1 is equivalent to testing uniformity of <span class="math inline">\(\{Y_n\}\)</span> in the set <span class="math inline">\(\{0, 1, ..., d-1\}\)</span>.</p></li>
 </ul>
 </div>
+</section></section>
+<section>
+<section id="frequency-test" class="title-slide slide level1 center">
+<h1>Frequency Test</h1>
+
+</section>
+<section id="test-procedure" class="slide level2">
+<h2>Test Procedure</h2>
+<div>
+<ul>
+<li class="fragment"><p>We are provided with a sequence of real numbers <span class="math display">\[U_1, U_2,...\]</span> We need to test <span class="math display">\[H_0: U_1, U_2, ... \sim U(0,1) \text{ independently} \quad \text{vs} \quad H_1: \text{not } H_0\]</span></p></li>
+<li class="fragment"><p>For an integer <span class="math inline">\(d\)</span> we construct the sequence <span class="math inline">\(\{Y_n\}\)</span> as discussed earlier.</p></li>
+<li class="fragment"><p>If <span class="math inline">\(H_0\)</span> is true, <span class="math inline">\(\{Y_n\}\)</span> is a random sample from <span class="math inline">\(\{0, 1, ..., d-1\}\)</span>.</p></li>
+<li class="fragment"><p>We count the number of occurences of <span class="math inline">\(r\)</span> in <span class="math inline">\(\{Y_n\}\)</span> for all <span class="math inline">\(0 \leq r \leq d-1\)</span>.</p></li>
+<li class="fragment"><p>Under <span class="math inline">\(H_0\)</span>, expected frequency of each <span class="math inline">\(r\)</span> in <span class="math inline">\(\{Y_n\}\)</span> is <span class="math inline">\(\frac{n}{d}\)</span>.</p></li>
+</ul>
+</div>
 <div class="footer footer-default">
 
 </div>
