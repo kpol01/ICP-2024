@@ -31,22 +31,49 @@ We want to test the hypothesis,
 
 $$H_0:p_i = p_i^0 , \text{for all } i \quad \text{vs} \quad H_1 : p_i \neq p_i^0, \text{for at least one } i$$
 
-Let $f_i$ be the observed frequency of the $i^{th}$ class in the sample. Then the chi-square test statistic is given by
+Let $f_i$ be the observed frequency of the $i^{th}$ class in the sample. The observed frequency of the $i^{th}$ class is given by $O_i = np_i$ for all $i$.
+
+## Chi-square Goodness of Fit Test
+
+The chi-square goodness of fit statistic is given by,
+
+$$Q = \sum_{i=1}^{k} \frac{(f_i - np_i^0)^2}{np_i^0}$$
+Under $H_0$, $Q \xrightarrow{d} \chi^2_{k-1}$ as $n \rightarrow \infty$
+
+**Critical Region:** We reject $H_0$ for large values of observed $Q$. For large $n$ we reject $H_0$ if $Q_{obs} > \chi^2_{k-1}(\alpha)$, where $\chi^2_{k-1}(\alpha)$ is the upper $\alpha$ point of a $\chi^2_{k-1}$ distribution.
+
+## Kolmogorov-Smirnov Test
+
+Suppose $X_1, X_2, ..., X_n \sim F(.)$ independently.
+
+Let $F_0(.)$ be a known distribution function. We want to test the hypotheses,
+
+$$H_0 : F(x) = F_0(x), \text{for all  } x \quad vs \quad F(x) \neq F_0(x), \text{for at least one }x$$
+
+Let $S_n(.)$ be the empirical cdf defined as,
+
+$$S_n(x) = \frac{1}{n} \sum _{i = 1} ^n \mathbb{I}\{X_i \leq x\}$$
+
+Then 
+$$nS_n \sim Bin(n,F(x))$$
 
 
-Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+## Kolmogorov-Smirnov Test
 
-## Bullets
+The Kolmogorov - Smirnov Test Statistic is given by
 
-When you click the **Render** button a document will be generated that includes:
+$$D_n = \sup_{x} |S_n(x) - F_0(x)|$$
 
--   Content authored with markdown
--   Output from executable code
+**Critical Region:** We reject $H_0$ for large values of $Q_{obs}$.
 
-## Code
 
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+# Empirical Tests
 
-```{r}
-1 + 1
-```
+## The Setup
+
+Let us consider a sequence of numbers 
+
+$$U_1, U_2, U_3, ...$$ 
+
+of real numbers where each $0 < U_i < 1$. We need to test whether it is a random sample from $U(0,1)$.
+

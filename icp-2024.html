@@ -29,71 +29,6 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
-    /* CSS for syntax highlighting */
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-        color: #aaaaaa;
-      }
-    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-    div.sourceCode
-      { color: #003b4f; background-color: #f1f3f5; }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span { color: #003b4f; } /* Normal */
-    code span.al { color: #ad0000; } /* Alert */
-    code span.an { color: #5e5e5e; } /* Annotation */
-    code span.at { color: #657422; } /* Attribute */
-    code span.bn { color: #ad0000; } /* BaseN */
-    code span.bu { } /* BuiltIn */
-    code span.cf { color: #003b4f; } /* ControlFlow */
-    code span.ch { color: #20794d; } /* Char */
-    code span.cn { color: #8f5902; } /* Constant */
-    code span.co { color: #5e5e5e; } /* Comment */
-    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
-    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
-    code span.dt { color: #ad0000; } /* DataType */
-    code span.dv { color: #ad0000; } /* DecVal */
-    code span.er { color: #ad0000; } /* Error */
-    code span.ex { } /* Extension */
-    code span.fl { color: #ad0000; } /* Float */
-    code span.fu { color: #4758ab; } /* Function */
-    code span.im { color: #00769e; } /* Import */
-    code span.in { color: #5e5e5e; } /* Information */
-    code span.kw { color: #003b4f; } /* Keyword */
-    code span.op { color: #5e5e5e; } /* Operator */
-    code span.ot { color: #003b4f; } /* Other */
-    code span.pp { color: #ad0000; } /* Preprocessor */
-    code span.sc { color: #5e5e5e; } /* SpecialChar */
-    code span.ss { color: #20794d; } /* SpecialString */
-    code span.st { color: #20794d; } /* String */
-    code span.va { color: #111111; } /* Variable */
-    code span.vs { color: #20794d; } /* VerbatimString */
-    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="icp-2024_files/libs/revealjs/dist/theme/quarto.css">
   <link href="icp-2024_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -415,29 +350,39 @@ Ananyo Dey <br> Kaustav Paul
 <p>We consider mutually exclusive and exhaustive classes <span class="math inline">\(C_1, C_2,...,C_k\)</span> such that</p>
 <p><span class="math display">\[\mathbb{P}(X \in C_i) = p_i\]</span> We want to test the hypothesis,</p>
 <p><span class="math display">\[H_0:p_i = p_i^0 , \text{for all } i \quad \text{vs} \quad H_1 : p_i \neq p_i^0, \text{for at least one } i\]</span></p>
-<p>Let <span class="math inline">\(f_i\)</span> be the observed frequency of the <span class="math inline">\(i^{th}\)</span> class in the sample. Then the chi-square test statistic is given by</p>
-<p>Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <a href="https://quarto.org/docs/presentations/" class="uri">https://quarto.org/docs/presentations/</a>.</p>
+<p>Let <span class="math inline">\(f_i\)</span> be the observed frequency of the <span class="math inline">\(i^{th}\)</span> class in the sample. The observed frequency of the <span class="math inline">\(i^{th}\)</span> class is given by <span class="math inline">\(O_i = np_i\)</span> for all <span class="math inline">\(i\)</span>.</p>
 </section>
-<section id="bullets" class="slide level2">
-<h2>Bullets</h2>
-<p>When you click the <strong>Render</strong> button a document will be generated that includes:</p>
-<ul>
-<li class="fragment">Content authored with markdown</li>
-<li class="fragment">Output from executable code</li>
-</ul>
+<section id="chi-square-goodness-of-fit-test-1" class="slide level2">
+<h2>Chi-square Goodness of Fit Test</h2>
+<p>The chi-square goodness of fit statistic is given by,</p>
+<p><span class="math display">\[Q = \sum_{i=1}^{k} \frac{(f_i - np_i^0)^2}{np_i^0}\]</span> Under <span class="math inline">\(H_0\)</span>, <span class="math inline">\(Q \xrightarrow{d} \chi^2_{k-1}\)</span> as <span class="math inline">\(n \rightarrow \infty\)</span></p>
+<p><strong>Critical Region:</strong> We reject <span class="math inline">\(H_0\)</span> for large values of observed <span class="math inline">\(Q\)</span>. For large <span class="math inline">\(n\)</span> we reject <span class="math inline">\(H_0\)</span> if <span class="math inline">\(Q_{obs} &gt; \chi^2_{k-1}(\alpha)\)</span>, where <span class="math inline">\(\chi^2_{k-1}(\alpha)\)</span> is the upper <span class="math inline">\(\alpha\)</span> point of a <span class="math inline">\(\chi^2_{k-1}\)</span> distribution.</p>
 </section>
-<section id="code" class="slide level2">
-<h2>Code</h2>
-<p>When you click the <strong>Render</strong> button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:</p>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
-</div>
-</div>
+<section id="kolmogorov-smirnov-test" class="slide level2">
+<h2>Kolmogorov-Smirnov Test</h2>
+<p>Suppose <span class="math inline">\(X_1, X_2, ..., X_n \sim F(.)\)</span> independently.</p>
+<p>Let <span class="math inline">\(F_0(.)\)</span> be a known distribution function. We want to test the hypotheses,</p>
+<p><span class="math display">\[H_0 : F(x) = F_0(x), \text{for all  } x \quad vs \quad F(x) \neq F_0(x), \text{for at least one }x\]</span></p>
+<p>Let <span class="math inline">\(S_n(.)\)</span> be the empirical cdf defined as,</p>
+<p><span class="math display">\[S_n(x) = \frac{1}{n} \sum _{i = 1} ^n \mathbb{I}\{X_i \leq x\}\]</span></p>
+<p>Then <span class="math display">\[nS_n \sim Bin(n,F(x))\]</span></p>
+</section>
+<section id="kolmogorov-smirnov-test-1" class="slide level2">
+<h2>Kolmogorov-Smirnov Test</h2>
+<p>The Kolmogorov - Smirnov Test Statistic is given by</p>
+<p><span class="math display">\[D_n = \sup_{x} |S_n(x) - F_0(x)|\]</span></p>
+<p><strong>Critical Region:</strong> We reject <span class="math inline">\(H_0\)</span> for large values of <span class="math inline">\(Q_{obs}\)</span>.</p>
+</section></section>
+<section>
+<section id="empirical-tests" class="title-slide slide level1 center">
+<h1>Empirical Tests</h1>
+
+</section>
+<section id="the-setup" class="slide level2">
+<h2>The Setup</h2>
+<p>Let us consider a sequence of numbers</p>
+<p><span class="math display">\[U_1, U_2, U_3, ...\]</span></p>
+<p>of real numbers where each <span class="math inline">\(0 &lt; U_i &lt; 1\)</span>. We need to test whether it is a random sample from <span class="math inline">\(U(0,1)\)</span>.</p>
 <div class="footer footer-default">
 
 </div>
@@ -653,44 +598,6 @@ Ananyo Dey <br> Kaustav Paul
         ]
       });
     </script>
-    
-    <script>
-      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
-      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
-      // slide changes (different for each slide format).
-      (function () {
-        // dispatch for htmlwidgets
-        function fireSlideEnter() {
-          const event = window.document.createEvent("Event");
-          event.initEvent("slideenter", true, true);
-          window.document.dispatchEvent(event);
-        }
-
-        function fireSlideChanged(previousSlide, currentSlide) {
-          fireSlideEnter();
-
-          // dispatch for shiny
-          if (window.jQuery) {
-            if (previousSlide) {
-              window.jQuery(previousSlide).trigger("hidden");
-            }
-            if (currentSlide) {
-              window.jQuery(currentSlide).trigger("shown");
-            }
-          }
-        }
-
-        // hookup for slidy
-        if (window.w3c_slidy) {
-          window.w3c_slidy.add_observer(function (slide_num) {
-            // slide_num starts at position 1
-            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
-          });
-        }
-
-      })();
-    </script>
-
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {
