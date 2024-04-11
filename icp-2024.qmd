@@ -1,0 +1,52 @@
+---
+title: "Tests for Randomness"
+
+author: "Ananyo Dey
+      <br>
+      Kaustav Paul"
+institute: Indian Statistical Institute, Delhi Center
+Date: "2024.04.11"
+format: 
+  revealjs: 
+    incremental: true
+    code-fold: true
+    transition: slide
+    theme: serif
+    fontsize: 200%
+execute: 
+  echo: true
+editor: visual
+---
+
+# Some Statistical Tests for Goodness of Fit
+
+## Chi-square Goodness of Fit Test
+
+Let $X_1, X_2, ..., X_n \sim F(.)$ independently.
+
+We consider mutually exclusive and exhaustive classes $C_1, C_2,...,C_k$ such that 
+
+$$\mathbb{P}(X \in C_i) = p_i$$
+We want to test the hypothesis,
+
+$$H_0:p_i = p_i^0 , \text{for all } i \quad \text{vs} \quad H_1 : p_i \neq p_i^0, \text{for at least one } i$$
+
+Let $f_i$ be the observed frequency of the $i^{th}$ class in the sample. Then the chi-square test statistic is given by
+
+
+Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+
+## Bullets
+
+When you click the **Render** button a document will be generated that includes:
+
+-   Content authored with markdown
+-   Output from executable code
+
+## Code
+
+When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```

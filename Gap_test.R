@@ -30,3 +30,37 @@ gap_test <- function (u, lower, upper)
 
 gap_test(runif(1000), 0.3, 0.7)
 gap.test(runif(1000), 0.1, 0.9)
+
+
+library(DiagrammeR)
+graph <- "
+digraph flowchart {
+
+  # Node definitions
+  Initialize [shape=box, label=\"Initialize\", color=\"blue\"];
+  rtozero [shape=box, label=\"Set r to zero\", color=\"blue\"];
+  checking [shape=ellipse, label=\"G3: a <= U<sub>j <= b\", color=\"orange\"];
+  increaser [shape=ellipse, label=\"Increase r\", color=\"orange\"]
+  recordlength [shape=ellipse, label=\"record the gap length\", color=\"orange\"]
+  numberofgaps [shape=ellipse, label=\"n gaps found?\", color=\"orange\"]
+  
+  
+  
+  
+  # Edges to indicate the flow
+  Initialize -> rtozero
+  rtozero -> checking
+  checking -> increaser [label = \"No\"]
+  increaser -> checking
+  checking -> recordlength [label = \"Yes\"]
+  recordlength -> numberofgaps
+  numberofgaps -> rtozero [label = \"No\"]
+  numberofgaps -> Initialize [label=\"Yes\"]
+  
+
+}
+
+"
+
+grViz(graph)
+
