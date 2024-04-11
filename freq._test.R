@@ -37,7 +37,7 @@ sampling.dep(1000)
 set.seed(seed = 1234)
 freq_test(sampling.dep(1000), 100)
 
-sam <- sampling.dep(1000)
+sam <- runif(1000)
 freq.test(sam,0:499)
 d <- seq(10, 1000, 50)
 
