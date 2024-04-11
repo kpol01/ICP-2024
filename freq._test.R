@@ -46,3 +46,43 @@ df <- data.frame(d,pvalue)
 
 library(ggplot2)
 ggplot(data = df) + geom_point(mapping = aes(x = d, y = pvalue))
+
+library(DiagrammeR)
+graph <- "
+digraph flowchart {
+
+  # Node definitions
+  A [shape=box, label=\"U_n\", color=\"blue\"];
+  B [shape=box, label=\"Y_n\", color=\"blue\"];
+  C [shape=box, label=\"count[r] = 0\", color=\"blue\"];
+  D [shape=ellipse, label=\"Is r = Y_i?\", color=\"orange\"]
+  E [shape=box, label=\"count[r] = count[r] + 1\", color=\"blue\"]
+  F [shape=box, label=\"i = i+1\", color=\"blue\"]
+  G [shape=ellipse, label=\"Is i <= n?\", color=\"orange\"]
+  H [shape = box, label=\"r = r+1\", color=\"blue\"]
+  I [shape=ellipse, label=\"Is r<d?\", color=\"orange\"]
+  J [shape=box, label=\"End\", color=\"blue\"]
+  
+  
+  
+  
+  # Edges to indicate the flow
+  A -> B [label=\"Divide by d and take floor\"]
+  B -> C [label=\"set r=0\"]
+  C -> D [label = \"set i=1\"]
+  D -> E [label=\"yes\"]
+  E -> F 
+  D -> F [label=\"no\"]
+  F -> G 
+  G -> D [label=\"yes\"]
+  G -> H [label=\"no\"]
+  H -> I 
+  I -> C [label=\"yes\"]
+  I -> J [label=\"no\"]
+  
+
+}
+
+"
+
+grViz(graph)

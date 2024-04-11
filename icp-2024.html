@@ -29,6 +29,71 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="icp-2024_files/libs/revealjs/dist/theme/quarto.css">
   <link href="icp-2024_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -319,6 +384,10 @@
       margin-right: 0; 
     }
   </style>
+  <script src="icp-2024_files/libs/htmlwidgets-1.6.3/htmlwidgets.js"></script>
+  <script src="icp-2024_files/libs/viz-1.8.2/viz.js"></script>
+  <link href="icp-2024_files/libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
+  <script src="icp-2024_files/libs/grViz-binding-1.0.11/grViz.js"></script>
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -401,7 +470,115 @@ Ananyo Dey <br> Kaustav Paul
 <li class="fragment"><p>If <span class="math inline">\(H_0\)</span> is true, <span class="math inline">\(\{Y_n\}\)</span> is a random sample from <span class="math inline">\(\{0, 1, ..., d-1\}\)</span>.</p></li>
 <li class="fragment"><p>We count the number of occurences of <span class="math inline">\(r\)</span> in <span class="math inline">\(\{Y_n\}\)</span> for all <span class="math inline">\(0 \leq r \leq d-1\)</span>.</p></li>
 <li class="fragment"><p>Under <span class="math inline">\(H_0\)</span>, expected frequency of each <span class="math inline">\(r\)</span> in <span class="math inline">\(\{Y_n\}\)</span> is <span class="math inline">\(\frac{n}{d}\)</span>.</p></li>
+<li class="fragment"><p>Now we use the <span class="math inline">\(\chi^2\)</span>-goodness of fit test over <span class="math inline">\(\{Y_n\}\)</span> using <span class="math inline">\(\{0, 1, ..., d-1\}\)</span> as the <span class="math inline">\(d\)</span> classes.</p></li>
 </ul>
+</div>
+</section>
+<section id="algorithm-to-calculate-frequencies" class="slide level2">
+<h2>Algorithm to Calculate Frequencies</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div class="grViz html-widget html-fill-item" id="htmlwidget-63e17f3614cb0c412d2d" style="width:960px;height:672px;"></div>
+<script type="application/json" data-for="htmlwidget-63e17f3614cb0c412d2d">{"x":{"diagram":"\ndigraph flowchart {\n\n  # Node definitions\n  A [shape=box, label=\"U_n\", color=\"blue\"];\n  B [shape=box, label=\"Y_n\", color=\"blue\"];\n  C [shape=box, label=\"count[r] = 0\", color=\"blue\"];\n  D [shape=ellipse, label=\"Is r = Y_i?\", color=\"orange\"]\n  E [shape=box, label=\"count[r] = count[r] + 1\", color=\"blue\"]\n  F [shape=box, label=\"i = i+1\", color=\"blue\"]\n  G [shape=ellipse, label=\"Is i <= n?\", color=\"orange\"]\n  H [shape = box, label=\"r = r+1\", color=\"blue\"]\n  I [shape=ellipse, label=\"Is r<d?\", color=\"orange\"]\n  J [shape=box, label=\"End\", color=\"blue\"]\n  \n  \n  \n  \n  # Edges to indicate the flow\n  A -> B [label=\"Divide by d and take floor\"]\n  B -> C [label=\"set r=0\"]\n  C -> D [label = \"set i=1\"]\n  D -> E [label=\"yes\"]\n  E -> F \n  D -> F [label=\"no\"]\n  F -> G \n  G -> D [label=\"yes\"]\n  G -> H [label=\"no\"]\n  H -> I \n  I -> C [label=\"yes\"]\n  I -> J [label=\"no\"]\n  \n\n}\n\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>freq_test <span class="ot">&lt;-</span> <span class="cf">function</span> (u, d) </span>
+<span id="cb1-2"><a href="#cb1-2"></a>{</span>
+<span id="cb1-3"><a href="#cb1-3"></a>  seq <span class="ot">=</span> <span class="dv">0</span><span class="sc">:</span>(d<span class="dv">-1</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a>  integernum <span class="ot">&lt;-</span> <span class="fu">floor</span>(u <span class="sc">*</span> d)</span>
+<span id="cb1-5"><a href="#cb1-5"></a>  obsnum <span class="ot">&lt;-</span> <span class="fu">sapply</span>(seq, <span class="cf">function</span>(x) <span class="fu">sum</span>(integernum <span class="sc">==</span> x))</span>
+<span id="cb1-6"><a href="#cb1-6"></a>  expnum <span class="ot">&lt;-</span> <span class="fu">length</span>(u)<span class="sc">/</span><span class="fu">length</span>(seq)</span>
+<span id="cb1-7"><a href="#cb1-7"></a>  residu <span class="ot">&lt;-</span> (obsnum <span class="sc">-</span> expnum)<span class="sc">/</span><span class="fu">sqrt</span>(expnum)</span>
+<span id="cb1-8"><a href="#cb1-8"></a>  stat <span class="ot">&lt;-</span> <span class="fu">sum</span>(residu<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb1-9"><a href="#cb1-9"></a>  pvalue <span class="ot">&lt;-</span> <span class="fu">pchisq</span>(stat, <span class="fu">length</span>(seq) <span class="sc">-</span> <span class="dv">1</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-10"><a href="#cb1-10"></a>  <span class="fu">options</span>(<span class="at">digits =</span> <span class="dv">2</span>)</span>
+<span id="cb1-11"><a href="#cb1-11"></a>  df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(obsnum), obsnum, expnum)</span>
+<span id="cb1-12"><a href="#cb1-12"></a>  <span class="fu">colnames</span>(df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Y_j"</span>, <span class="st">"Observed Freq"</span>, <span class="st">"Expected Freq"</span>)</span>
+<span id="cb1-13"><a href="#cb1-13"></a>  </span>
+<span id="cb1-14"><a href="#cb1-14"></a>  res <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">statistic =</span> stat, <span class="at">parameter =</span> <span class="fu">length</span>(seq) <span class="sc">-</span> <span class="dv">1</span>, </span>
+<span id="cb1-15"><a href="#cb1-15"></a>              <span class="at">p.value =</span> pvalue, df)</span>
+<span id="cb1-16"><a href="#cb1-16"></a>  <span class="fu">return</span>(res)</span>
+<span id="cb1-17"><a href="#cb1-17"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="implementation-of-the-freq_test-function" class="slide level2">
+<h2>Implementation of the <code>freq_test</code> Function</h2>
+<p><strong>Under <span class="math inline">\(H_0\)</span>:</strong></p>
+<p><span class="math display">\[U_1, U_2, U_3, ... \sim U(0,1)\]</span></p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>sample <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1000</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>d <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="fu">freq_test</span>(sample, d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>$statistic
+[1] 51
+
+$parameter
+[1] 49
+
+$p.value
+[1] 0.38
+
+[[4]]
+   Y_j Observed Freq Expected Freq
+1    1            25            20
+2    2            19            20
+3    3            19            20
+4    4            20            20
+5    5            14            20
+6    6            13            20
+7    7            19            20
+8    8            24            20
+9    9            20            20
+10  10            14            20
+11  11            19            20
+12  12            29            20
+13  13            24            20
+14  14            21            20
+15  15            20            20
+16  16            27            20
+17  17            17            20
+18  18            17            20
+19  19            16            20
+20  20            19            20
+21  21            13            20
+22  22            21            20
+23  23            14            20
+24  24            19            20
+25  25            13            20
+26  26            19            20
+27  27            29            20
+28  28            18            20
+29  29            26            20
+30  30            23            20
+31  31            24            20
+32  32            29            20
+33  33            26            20
+34  34            19            20
+35  35            16            20
+36  36            21            20
+37  37            18            20
+38  38            21            20
+39  39            19            20
+40  40            25            20
+41  41            24            20
+42  42            27            20
+43  43            12            20
+44  44            19            20
+45  45            12            20
+46  46            21            20
+47  47            21            20
+48  48            22            20
+49  49            15            20
+50  50            18            20</code></pre>
+</div>
 </div>
 <div class="footer footer-default">
 
@@ -618,6 +795,44 @@ Ananyo Dey <br> Kaustav Paul
         ]
       });
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {

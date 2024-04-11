@@ -24,10 +24,9 @@ editor: visual
 
 Let $X_1, X_2, ..., X_n \sim F(.)$ independently.
 
-We consider mutually exclusive and exhaustive classes $C_1, C_2,...,C_k$ such that 
+We consider mutually exclusive and exhaustive classes $C_1, C_2,...,C_k$ such that
 
-$$\mathbb{P}(X \in C_i) = p_i$$
-We want to test the hypothesis,
+$$\mathbb{P}(X \in C_i) = p_i$$ We want to test the hypothesis,
 
 $$H_0:p_i = p_i^0 , \text{for all } i \quad \text{vs} \quad H_1 : p_i \neq p_i^0, \text{for at least one } i$$
 
@@ -37,8 +36,7 @@ Let $f_i$ be the observed frequency of the $i^{th}$ class in the sample. The obs
 
 The chi-square goodness of fit statistic is given by,
 
-$$Q = \sum_{i=1}^{k} \frac{(f_i - np_i^0)^2}{np_i^0}$$
-Under $H_0$, $Q \xrightarrow{d} \chi^2_{k-1}$ as $n \rightarrow \infty$
+$$Q = \sum_{i=1}^{k} \frac{(f_i - np_i^0)^2}{np_i^0}$$ Under $H_0$, $Q \xrightarrow{d} \chi^2_{k-1}$ as $n \rightarrow \infty$
 
 **Critical Region:** We reject $H_0$ for large values of observed $Q$. For large $n$ we reject $H_0$ if $Q_{obs} > \chi^2_{k-1}(\alpha)$, where $\chi^2_{k-1}(\alpha)$ is the upper $\alpha$ point of a $\chi^2_{k-1}$ distribution.
 
@@ -54,9 +52,7 @@ Let $S_n(.)$ be the empirical cdf defined as,
 
 $$S_n(x) = \frac{1}{n} \sum _{i = 1} ^n \mathbb{I}\{X_i \leq x\}$$
 
-Then 
-$$nS_n \sim Bin(n,F(x))$$
-
+Then $$nS_n \sim Bin(n,F(x))$$
 
 ## Kolmogorov-Smirnov Test
 
@@ -66,34 +62,108 @@ $$D_n = \sup_{x} |S_n(x) - F_0(x)|$$
 
 **Critical Region:** We reject $H_0$ for large values of $Q_{obs}$.
 
-
 # Empirical Tests
 
 ## The Setup
 
-
 ::: incremental
+-   Let us consider a sequence of numbers $$U_1, U_2, U_3, ...\quad (1)$$ of real numbers where each $0 < U_i < 1$. We need to test whether it is a random sample from $U(0,1)$.
 
-- Let us consider a sequence of numbers $$U_1, U_2, U_3, ...\quad (1)$$ of real numbers where each $0 < U_i < 1$. We need to test whether it is a random sample from $U(0,1)$.
-
--  Some of the tests are designed primarily for integer-valued
-sequences, instead of the real-valued sequence (1). In this case, the auxiliary
-sequence $$Y_1, Y_2, ... \quad (2)$$ defined by the rule $$ Y_n = \lfloor dU_n \rfloor \quad ...(3)$$ is used instead. So testing the uniformity of $\{U_n\}$ between 0 and 1 is equivalent to testing uniformity of $\{Y_n\}$ in the set $\{0, 1, ..., d-1\}$. 
+-   Some of the tests are designed primarily for integer-valued sequences, instead of the real-valued sequence (1). In this case, the auxiliary sequence $$Y_1, Y_2, ... \quad (2)$$ defined by the rule $$ Y_n = \lfloor dU_n \rfloor \quad ...(3)$$ is used instead. So testing the uniformity of $\{U_n\}$ between 0 and 1 is equivalent to testing uniformity of $\{Y_n\}$ in the set $\{0, 1, ..., d-1\}$.
 :::
 
-# Frequency Test 
+# Frequency Test
 
 ## Test Procedure
 
-:::incremental
-- We are provided with a sequence of real numbers $$U_1, U_2,...$$ We need to test $$H_0: U_1, U_2, ... \sim U(0,1) \text{ independently} \quad \text{vs} \quad H_1: \text{not } H_0$$
+::: incremental
+-   We are provided with a sequence of real numbers $$U_1, U_2,...$$ We need to test $$H_0: U_1, U_2, ... \sim U(0,1) \text{ independently} \quad \text{vs} \quad H_1: \text{not } H_0$$
 
-- For an integer $d$ we construct the sequence $\{Y_n\}$ as discussed earlier. 
+-   For an integer $d$ we construct the sequence $\{Y_n\}$ as discussed earlier.
 
-- If $H_0$ is true, $\{Y_n\}$ is a random sample from $\{0, 1, ..., d-1\}$.
+-   If $H_0$ is true, $\{Y_n\}$ is a random sample from $\{0, 1, ..., d-1\}$.
 
-- We count the number of occurences of $r$ in $\{Y_n\}$ for all $0 \leq r \leq d-1$.
+-   We count the number of occurences of $r$ in $\{Y_n\}$ for all $0 \leq r \leq d-1$.
 
-- Under $H_0$, expected frequency of each $r$ in $\{Y_n\}$ is $\frac{n}{d}$.
+-   Under $H_0$, expected frequency of each $r$ in $\{Y_n\}$ is $\frac{n}{d}$.
 
+-   Now we use the $\chi^2$-goodness of fit test over $\{Y_n\}$ using $\{0, 1, ..., d-1\}$ as the $d$ classes.
 :::
+
+## Algorithm to Calculate Frequencies
+
+```{r echo = F, warning=F, fig.height=7}
+library(DiagrammeR)
+graph <- "
+digraph flowchart {
+
+  # Node definitions
+  A [shape=box, label=\"U_n\", color=\"blue\"];
+  B [shape=box, label=\"Y_n\", color=\"blue\"];
+  C [shape=box, label=\"count[r] = 0\", color=\"blue\"];
+  D [shape=ellipse, label=\"Is r = Y_i?\", color=\"orange\"]
+  E [shape=box, label=\"count[r] = count[r] + 1\", color=\"blue\"]
+  F [shape=box, label=\"i = i+1\", color=\"blue\"]
+  G [shape=ellipse, label=\"Is i <= n?\", color=\"orange\"]
+  H [shape = box, label=\"r = r+1\", color=\"blue\"]
+  I [shape=ellipse, label=\"Is r<d?\", color=\"orange\"]
+  J [shape=box, label=\"End\", color=\"blue\"]
+  
+  
+  
+  
+  # Edges to indicate the flow
+  A -> B [label=\"Divide by d and take floor\"]
+  B -> C [label=\"set r=0\"]
+  C -> D [label = \"set i=1\"]
+  D -> E [label=\"yes\"]
+  E -> F 
+  D -> F [label=\"no\"]
+  F -> G 
+  G -> D [label=\"yes\"]
+  G -> H [label=\"no\"]
+  H -> I 
+  I -> C [label=\"yes\"]
+  I -> J [label=\"no\"]
+  
+
+}
+
+"
+
+grViz(graph)
+```
+
+
+```{r}
+freq_test <- function (u, d) 
+{
+  seq = 0:(d-1)
+  integernum <- floor(u * d)
+  obsnum <- sapply(seq, function(x) sum(integernum == x))
+  expnum <- length(u)/length(seq)
+  residu <- (obsnum - expnum)/sqrt(expnum)
+  stat <- sum(residu^2)
+  pvalue <- pchisq(stat, length(seq) - 1, lower.tail = FALSE)
+  options(digits = 2)
+  df <- data.frame(1:length(obsnum), obsnum, expnum)
+  colnames(df) <- c("Y_j", "Observed Freq", "Expected Freq")
+  
+  res <- list(statistic = stat, parameter = length(seq) - 1, 
+              p.value = pvalue, df)
+  return(res)
+}
+```
+
+## Implementation of the `freq_test` Function
+
+**Under $H_0$:**
+
+$$U_1, U_2, U_3, ... \sim U(0,1)$$
+
+```{r}
+sample <- runif(1000)
+d <- 50
+freq_test(sample, d)
+```
+
