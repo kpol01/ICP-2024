@@ -28,6 +28,22 @@ editor: visual
 
 -   For performing this test we need "lower" and "upper" values denoted as $\alpha$ and $\beta$ respectively. Note here both real should be in between $0$ and $1$.
 
+## Behind the scene {.scrollable}
+
+-   Define, "gap" variable as, $$ G_i =\begin{cases} 1 & \text{if lower} \leq U_i \leq \text{upper}  \\ 0 & \text{otherwise} \end{cases} $$
+
+-   Let $p$ stands for the probability that $G_i$ equals to one i.e. $p =$ upper - lower = $\mathbf{\beta - \alpha}$.
+
+-   Now, let's focus on the **zero gaps** :
+
+    -   A zero gap occurs when consecutive $G_i$ values are both $0$.
+
+    -   We denote the length of a zero gap as $j$.
+
+    -   We count the number of zero gaps of length $j$, denoted as $n_j$.
+
+    -   We calculate $p_j$ for the probability the length of zeros gaps equals to $j$ is $(1-p)^2 p^j$
+    
 ## Flowchart
 
 :::columns
@@ -49,7 +65,7 @@ digraph flowchart {
   F [shape=ellipse, label=\"Is i <= n?\", color=\"orange\"]
   G [shape=box, label=\"lower <= U_i <= upper\", color=\"blue\"]
   H [shape=box, label=\"Record the gap length r\", color=\"blue\"]
-  I [shape=ellipse, label=\"m (pre defined) gaps found?\", color=\"orange\"]
+  I [shape=ellipse, label=\"n gaps found?\", color=\"orange\"]
   J [shape=box, label=\"End\", color=\"blue\"]
   K [shape=box, label=\"r = r+1\", color=\"blue\"]
   
@@ -115,29 +131,13 @@ gap_test <- function (u, lower, upper)
 ::: 
 
 
-## Behind the scene {.scrollable}
-
--   Define, "gap" variable as, $$ G_i =\begin{cases} 1 & \text{if lower} \leq U_i \leq \text{upper}  \\ 0 & \text{otherwise} \end{cases} $$
-
--   Let $p$ stands for the probability that $G_i$ equals to one i.e. $p =$ upper - lower = $\mathbf{\beta - \alpha}$.
-
--   Now, let's focus on the **zero gaps** :
-
-    -   A zero gap occurs when consecutive $G_i$ values are both $0$.
-
-    -   We denote the length of a zero gap as $j$.
-
-    -   We count the number of zero gaps of length $j$, denoted as $n_j$.
-
-    -   We calculate $p_j$ for the probability the length of zeros gaps equals to $j$ is $(1-p)^2 p^j$
-
 ## Test Statistics {.scrollable}
 
 -   We compare the observed number of zero gaps ($n_j$) with the expected number under the null hypothesis.
 
 -   The null hypothesis assumes that the lengths of zero gaps follow a certain probability distribution (geometric).
 
--   The chi-squared statistic is calculated as : $$ S = \sum_{j=1}^m \frac{(n_j - np_j)^2}{np_j}$$ where the $m$ denotes the maximum number of lengths.
+-   The chi-squared statistic is calculated as : $$ S = \sum_{j=1}^m \frac{(n_j - np_j)^2}{np_j}$$ where the $m$ denotes the maximum number of lengths calculated by $$\lfloor \frac{\log(10^{-1})-2\log(1-p)-\log(n)}{\log(p)} \rfloor$$.
 
 ## Comments
 
@@ -185,11 +185,19 @@ gap_test(sampling.dep(1000), 0.3,0.7)
 
 ## Setup
 
--   Given an ordered sequence of one or more types of symbols, we define **run** as a succession of one or more types of symbols which are followed or proceed by a different symbol or no symbol at all.
+-   A **run** of a sequence is a maximal non-empty segment of the sequence consisting of adjacent equal elements. For example, the 22-element-long sequence $$+ + + + − − − + + + − − + + + + + + − − − −$$ consists of 6 runs, with lengths 4, 3, 3, 2, 6,
 
 -   Clues to lack of randomness are provided by any tendency of the symbols to exhibit a definite pattern in the sequence.
 
 -   Note both the number of runs and lengths of the runs which are of course interrelated, should reflect the existence of some sort of pattern.
+
+## Behind the scene {.scrollable}
+
+-   Here we are discussing *the number of runs* only.
+
+-   For a given data we transform this into a dichotomous vector according as each values is above or below a given threshold. Note the values equal to the level are removed from the sample.
+
+-   For the alternative "left.sided", the null of randomness is tested against a trend. By using the alternative "right.sided", the null hypothesis of randomness is tested against a first order negative serial correlation, using "two.sided" alternative, null hypothesis of randomness is tested against nonrandomness.
 
 ## Flowchart
 
@@ -330,14 +338,6 @@ run_test <- function (x, alternative = "two.sided", threshold = median(x),
 :::
 
 :::
-
-## Behind the scene {.scrollable}
-
--   Here we are discussing *the number of runs* only.
-
--   For a given data we transform this into a dichotomous vector according as each values is above or below a given threshold. Note the values equal to the level are removed from the sample.
-
--   For the alternative "left.sided", the null of randomness is tested against a trend. By using the alternative "right.sided", the null hypothesis of randomness is tested against a first order negative serial correlation, using "two.sided" alternative, null hypothesis of randomness is tested against nonrandomness.
 
 ## Test Statistic
 
