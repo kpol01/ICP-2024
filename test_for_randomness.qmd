@@ -43,6 +43,8 @@ editor: visual
     -   We count the number of zero gaps of length $j$, denoted as $n_j$.
 
     -   We calculate $p_j$ for the probability the length of zeros gaps equals to $j$ is $(1-p)^2 p^j$
+
+- For using all of the observation we are adding $0$ at the very first and the end.
     
 ## Flowchart
 
